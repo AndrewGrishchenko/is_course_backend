@@ -1,7 +1,11 @@
 package com.andrew.model;
 
+import com.andrew.model.enums.SupplyType;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -14,8 +18,9 @@ public class Supply {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private String name;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, unique = true)
+    private SupplyType name;
 
     @Column(nullable = false)
     private Integer amount;
@@ -23,7 +28,7 @@ public class Supply {
     public Supply() {
     }
 
-    public Supply(String name, Integer amount) {
+    public Supply(SupplyType name, Integer amount) {
         this.name = name;
         this.amount = amount;
     }
@@ -36,11 +41,11 @@ public class Supply {
         this.id = id;
     }
 
-    public String getName() {
+    public SupplyType getName() {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(SupplyType name) {
         this.name = name;
     }
 

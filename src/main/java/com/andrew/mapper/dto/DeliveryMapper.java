@@ -14,11 +14,9 @@ import com.andrew.model.VisitRequest;
 @Mapper(componentModel = MappingConstants.ComponentModel.CDI)
 public interface DeliveryMapper {
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "supply", source = "supplyId", qualifiedByName = "supplyFromId")
     @Mapping(target = "visitRequest", source = "visitRequestId", qualifiedByName = "visitRequestFromId")
     Delivery toEntity(DeliveryCreateDTO dto);
 
-    @Mapping(target = "supplyId", source = "supply.id")
     @Mapping(target = "visitRequestId", source = "visitRequest.id")
     DeliveryResponseDTO toResponse(Delivery entity);
 

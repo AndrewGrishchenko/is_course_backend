@@ -57,9 +57,6 @@ public class RouteService {
 
         try {
             routeRepository.buildRoute(id, dto.zoneIds());
-        // } catch (Exception e) {
-        //     throw new RouteBuildException("Failed to build route: " + e.getMessage());
-        // }
         } catch (Exception ex) {
             String msg = extractSqlErrorMessage(ex);
             throw new RouteBuildException("Failed to build route: " + msg);
@@ -86,7 +83,6 @@ public class RouteService {
         while (sqlEx != null) {
             String msg = sqlEx.getMessage();
             if (msg != null && !msg.isEmpty()) {
-                // вычленяем текст после "ОШИБКА: " до перевода строки
                 String[] lines = msg.split("\n");
                 for (String line : lines) {
                     line = line.trim();
@@ -120,8 +116,8 @@ public class RouteService {
         if (!route.getStatus().equals(RouteStatus.DRAFT))
             throw new ForbiddenException();
 
-        route.setStatus(RouteStatus.APPROVED);
-        route.getRequest().setStatus(RouteRequestStatus.APPROVED);
+        route.setStatus(RouteStatus.REJECTED);
+        route.getRequest().setStatus(RouteRequestStatus.REJECTED);
 
         routeRepository.update(route);
     }

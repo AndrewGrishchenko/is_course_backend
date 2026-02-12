@@ -5,12 +5,13 @@ import com.andrew.dto.VisitRequest.VisitRequestResponseDTO;
 import com.andrew.exceptions.NotFoundException;
 import com.andrew.mapper.dto.VisitRequestMapper;
 import com.andrew.model.VisitRequest;
+import com.andrew.model.enums.VisitRequestStatus;
 import com.andrew.repository.VisitRequestRepository;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
-import jakarta.security.enterprise.SecurityContext;
 import jakarta.transaction.Transactional;
+import jakarta.ws.rs.ForbiddenException;
 
 @ApplicationScoped
 public class VisitRequestService {
@@ -21,7 +22,13 @@ public class VisitRequestService {
     VisitRequestMapper visitRequestMapper;
 
     @Inject
-    private SecurityContext securityContext;
+    SupplyService supplyService;
+
+    @Transactional
+    public VisitRequest getById(Long id) {
+        return visitRequestRepository.findById(id)
+            .orElseThrow(() -> new NotFoundException("VisitRequest", id));
+    }
 
     @Transactional
     public VisitRequestResponseDTO createVisitRequest(VisitRequestCreateDTO dto) {
@@ -32,6 +39,50 @@ public class VisitRequestService {
     private VisitRequestResponseDTO createVisitRequest(VisitRequest visitRequest) {
         visitRequestRepository.save(visitRequest);
         return visitRequestMapper.toResponse(visitRequest);
+    }
+
+    @Transactional
+    public void submitVisitRequest(Long id) {
+        VisitRequest visitRequest = getById(id);
+        
+        if (!visitRequest.getStatus().equals(VisitRequestStatus.DRAFT))
+            throw new ForbiddenException();
+        
+        visitRequest.setStatus(VisitRequestStatus.SUBMITTED);
+        visitRequestRepository.update(visitRequest);
+    }
+
+    @Transactional
+    public void approveVisitRequest(Long id) {
+        VisitRequest visitRequest = getById(id);
+
+        if (!visitRequest.getStatus().equals(VisitRequestStatus.SUBMITTED))
+            throw new ForbiddenException();
+
+        visitRequest.setStatus(VisitRequestStatus.APPROVED);
+        visitRequestRepository.update(visitRequest);
+    }
+
+    @Transactional
+    public void rejectVisitRequest(Long id) {
+        VisitRequest visitRequest = getById(id);
+
+        if (!visitRequest.getStatus().equals(VisitRequestStatus.SUBMITTED))
+            throw new ForbiddenException();
+
+        visitRequest.setStatus(VisitRequestStatus.REJECTED);
+        visitRequestRepository.update(visitRequest);
+    }
+
+    @Transactional
+    public void completeVisitRequest(Long id) {
+        VisitRequest visitRequest = getById(id);
+
+        if (!visitRequest.getStatus().equals(VisitRequestStatus.APPROVED))
+            throw new ForbiddenException();
+
+        visitRequest.setStatus(VisitRequestStatus.COMPLETED);
+        visitRequestRepository.update(visitRequest);
     }
 
     @Transactional
@@ -49,6 +100,9 @@ public class VisitRequestService {
     public void deleteVisitRequest(Long id) {
         VisitRequest visitRequest = visitRequestRepository.findById(id)
             .orElseThrow(() -> new NotFoundException("VisitRequest", id));
+
+        if (!visitRequest.getStatus().equals(VisitRequestStatus.DRAFT))
+            throw new ForbiddenException();
         
         visitRequestRepository.delete(visitRequest);
     }

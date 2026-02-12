@@ -14,6 +14,7 @@ import com.andrew.model.VisitRequest;
 public interface VisitRequestMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "user", source = "userId", qualifiedByName = "userFromId")
+    @Mapping(target = "status", ignore = true)
     VisitRequest toEntity(VisitRequestCreateDTO dto);
 
     @Mapping(target = "userId", source = "user.id")

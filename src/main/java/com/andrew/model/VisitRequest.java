@@ -2,6 +2,8 @@ package com.andrew.model;
 
 import java.time.LocalDate;
 
+import com.andrew.model.enums.VisitRequestStatus;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -29,12 +31,12 @@ public class VisitRequest {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private Status status;
+    private VisitRequestStatus status = VisitRequestStatus.DRAFT;
 
     public VisitRequest() {
     }
 
-    public VisitRequest(User user, LocalDate date, Status status) {
+    public VisitRequest(User user, LocalDate date, VisitRequestStatus status) {
         this.user = user;
         this.date = date;
         this.status = status;
@@ -64,11 +66,11 @@ public class VisitRequest {
         this.date = date;
     }
 
-    public Status getStatus() {
+    public VisitRequestStatus getStatus() {
         return status;
     }
 
-    public void setStatus(Status status) {
+    public void setStatus(VisitRequestStatus status) {
         this.status = status;
     }
 }

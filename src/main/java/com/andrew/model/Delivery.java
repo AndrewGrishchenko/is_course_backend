@@ -1,7 +1,11 @@
 package com.andrew.model;
 
+import com.andrew.model.enums.SupplyType;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -16,9 +20,9 @@ public class Delivery {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "supply_id", nullable = false)
-    private Supply supply;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "supply_type", nullable = false)
+    private SupplyType supplyType;
 
     @ManyToOne
     @JoinColumn(name = "visit_request_id", nullable = false)
@@ -30,8 +34,8 @@ public class Delivery {
     public Delivery() {
     }
 
-    public Delivery(Supply supply, VisitRequest visitRequest, Integer amount) {
-        this.supply = supply;
+    public Delivery(SupplyType supplyType, VisitRequest visitRequest, Integer amount) {
+        this.supplyType = supplyType;
         this.visitRequest = visitRequest;
         this.amount = amount;
     }
@@ -44,12 +48,12 @@ public class Delivery {
         this.id = id;
     }
 
-    public Supply getSupply() {
-        return supply;
+    public SupplyType getSupplyType() {
+        return supplyType;
     }
 
-    public void setSupply(Supply supply) {
-        this.supply = supply;
+    public void setSupplyType(SupplyType supplyType) {
+        this.supplyType = supplyType;
     }
 
     public VisitRequest getVisitRequest() {

@@ -1,9 +1,9 @@
 package com.andrew.model.enums;
 
-public enum RouteStatus {
+public enum VisitRequestStatus {
     DRAFT,
+    SUBMITTED,
     APPROVED,
     REJECTED,
-    IN_PROGRESS,
     COMPLETED
 }
