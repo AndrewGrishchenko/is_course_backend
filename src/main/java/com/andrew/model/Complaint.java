@@ -20,15 +20,15 @@ public class Complaint {
     private Case caseValue;
 
     @ManyToOne
-    @JoinColumn(name = "route_id", nullable = false)
-    private Route route;
+    @JoinColumn(name = "route_request_id", nullable = false, unique = true)
+    private RouteRequest routeRequest;
 
     public Complaint() {
     }
 
-    public Complaint(Case caseValue, Route route) {
+    public Complaint(Case caseValue, RouteRequest routeRequest) {
         this.caseValue = caseValue;
-        this.route = route;
+        this.routeRequest = routeRequest;
     }
 
     public Long getId() {
@@ -47,11 +47,11 @@ public class Complaint {
         this.caseValue = caseValue;
     }
 
-    public Route getRoute() {
-        return route;
+    public RouteRequest getRouteRequest() {
+        return routeRequest;
     }
 
-    public void setRoute(Route route) {
-        this.route = route;
+    public void setRouteRequest(RouteRequest routeRequest) {
+        this.routeRequest = routeRequest;
     }
 }

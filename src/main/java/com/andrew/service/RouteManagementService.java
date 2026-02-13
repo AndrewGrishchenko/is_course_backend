@@ -107,7 +107,6 @@ public class RouteManagementService {
         Optional<Route> route = routeRepository.findByRequestId(id);
         if (route.isPresent()) {
             route.get().setStatus(RouteStatus.REJECTED);
-            System.err.println("route is present with id=" + route.get().getId() + ", trying to set rejected status");
             routeRepository.update(route.get());
         }
     }
@@ -167,5 +166,13 @@ public class RouteManagementService {
 
         routeRequestRepository.update(routeRequest);
         routeRepository.update(route);
+    }
+
+    @Transactional
+    public void assertCanBeRequestComplained(Long routeRequestId) {
+        RouteRequest routeRequest = getRouteRequestById(routeRequestId);
+
+        if (!routeRequest.getStatus().equals(RouteRequestStatus.REJECTED))
+            throw new ForbiddenException();
     }
 }

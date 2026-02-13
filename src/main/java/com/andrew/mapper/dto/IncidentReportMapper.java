@@ -14,12 +14,10 @@ import com.andrew.model.Supply;
 @Mapper(componentModel = MappingConstants.ComponentModel.CDI)
 public interface IncidentReportMapper {
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "case", source = "caseId", qualifiedByName = "caseFromId")
-    @Mapping(target = "supply", source = "supplyId", qualifiedByName = "supplyFromId")
+    @Mapping(target = "case", ignore = true)
     IncidentReport toEntity(IncidentReportCreateDTO dto);
 
     @Mapping(target = "caseId", source = "case.id")
-    @Mapping(target = "supplyId", source = "supply.id")
     IncidentReportResponseDTO toResponse(IncidentReport entity);
 
     @Named("caseFromId")

@@ -1,15 +1,16 @@
 package com.andrew.service;
 
+import java.math.BigDecimal;
+
 import com.andrew.dto.fine.FineCreateDTO;
 import com.andrew.dto.fine.FineResponseDTO;
-import com.andrew.exceptions.NotFoundException;
 import com.andrew.mapper.dto.FineMapper;
+import com.andrew.model.Case;
 import com.andrew.model.Fine;
 import com.andrew.repository.FineRepository;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
-import jakarta.security.enterprise.SecurityContext;
 import jakarta.transaction.Transactional;
 
 @ApplicationScoped
@@ -20,36 +21,30 @@ public class FineService {
     @Inject
     FineMapper fineMapper;
 
-    @Inject
-    private SecurityContext securityContext;
-
     @Transactional
-    public FineResponseDTO createFine(FineCreateDTO dto) {
-        return createFine(fineMapper.toEntity(dto));
-    }
-
-    @Transactional
-    private FineResponseDTO createFine(Fine fine) {
+    public FineResponseDTO createFine(Case c, BigDecimal amount) {
+        Fine fine = new Fine(c, amount);
         fineRepository.save(fine);
         return fineMapper.toResponse(fine);
     }
 
-    @Transactional
-    public FineResponseDTO updateFine(Long id, FineCreateDTO dto) {
-        fineRepository.findById(id)
-            .orElseThrow(() -> new NotFoundException("Fine", id));
+    //TODO: do we need this?
+    // @Transactional
+    // public FineResponseDTO updateFine(Long id, FineCreateDTO dto) {
+    //     fineRepository.findById(id)
+    //         .orElseThrow(() -> new NotFoundException("Fine", id));
 
-        Fine toUpdate = fineMapper.toEntity(dto);
-        toUpdate.setId(id);
+    //     Fine toUpdate = fineMapper.toEntity(dto);
+    //     toUpdate.setId(id);
 
-        return fineMapper.toResponse(fineRepository.update(toUpdate));
-    }
+    //     return fineMapper.toResponse(fineRepository.update(toUpdate));
+    // }
 
-    @Transactional
-    public void deleteFine(Long id) {
-        Fine fine = fineRepository.findById(id)
-            .orElseThrow(() -> new NotFoundException("Fine", id));
+    // @Transactional
+    // public void deleteFine(Long id) {
+    //     Fine fine = fineRepository.findById(id)
+    //         .orElseThrow(() -> new NotFoundException("Fine", id));
 
-        fineRepository.delete(fine);
-    }
+    //     fineRepository.delete(fine);
+    // }
 }

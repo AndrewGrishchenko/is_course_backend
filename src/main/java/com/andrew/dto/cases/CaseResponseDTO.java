@@ -1,9 +1,9 @@
 package com.andrew.dto.cases;
 
-import com.andrew.model.Status;
+import com.andrew.model.enums.CaseStatus;
 
 public record CaseResponseDTO(
     Long id,
     String description,
-    Status status
+    CaseStatus status
 ) {}

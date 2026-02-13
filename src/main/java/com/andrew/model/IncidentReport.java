@@ -1,11 +1,15 @@
 package com.andrew.model;
 
+import com.andrew.model.enums.SupplyType;
+
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
@@ -20,16 +24,16 @@ public class IncidentReport {
     @JoinColumn(name = "case_id", unique = true, nullable = false)
     private Case caseValue;
 
-    @ManyToOne
-    @JoinColumn(name = "supply_id", nullable = false)
-    private Supply supply;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "supply_type", nullable = false)
+    private SupplyType supplyType;
 
     public IncidentReport() {
     }
 
-    public IncidentReport(Case caseValue, Supply supply) {
+    public IncidentReport(Case caseValue, SupplyType supplyType) {
         this.caseValue = caseValue;
-        this.supply = supply;
+        this.supplyType = supplyType;
     }
 
     public Long getId() {
@@ -48,11 +52,11 @@ public class IncidentReport {
         this.caseValue = caseValue;
     }
 
-    public Supply getSupply() {
-        return supply;
+    public SupplyType getSupplyType() {
+        return supplyType;
     }
 
-    public void setSupply(Supply supply) {
-        this.supply = supply;
+    public void setSupplyType(SupplyType supplyType) {
+        this.supplyType = supplyType;
     }
 }

@@ -1,5 +1,7 @@
 package com.andrew.model;
 
+import com.andrew.model.enums.CaseStatus;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -21,14 +23,13 @@ public class Case {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private Status status;
+    private CaseStatus status = CaseStatus.OPEN;
 
     public Case() {
     }
 
-    public Case(String description, Status status) {
+    public Case(String description) {
         this.description = description;
-        this.status = status;
     }
 
     public Long getId() {
@@ -47,11 +48,11 @@ public class Case {
         this.description = description;
     }
 
-    public Status getStatus() {
+    public CaseStatus getStatus() {
         return status;
     }
 
-    public void setStatus(Status status) {
+    public void setStatus(CaseStatus status) {
         this.status = status;
     }
 }

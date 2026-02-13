@@ -9,17 +9,17 @@ import com.andrew.dto.complaint.ComplaintCreateDTO;
 import com.andrew.dto.complaint.ComplaintResponseDTO;
 import com.andrew.model.Case;
 import com.andrew.model.Complaint;
-import com.andrew.model.Route;
+import com.andrew.model.RouteRequest;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.CDI)
 public interface ComplaintMapper {
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "case", source = "caseId", qualifiedByName = "caseFromId")
-    @Mapping(target = "route", source = "routeId", qualifiedByName = "routeFromId")
+    @Mapping(target = "case", ignore = true)
+    @Mapping(target = "routeRequest", source = "routeRequestId", qualifiedByName = "routeRequestFromId")
     Complaint toEntity(ComplaintCreateDTO dto);
 
     @Mapping(target = "caseId", source = "case.id")
-    @Mapping(target = "routeId", source = "route.id")
+    @Mapping(target = "routeRequestId", source = "routeRequest.id")
     ComplaintResponseDTO toResponse(Complaint entity);
 
     @Named("caseFromId")
@@ -29,10 +29,10 @@ public interface ComplaintMapper {
         return caseValue;
     }
 
-    @Named("routeFromId")
-    default Route routeFromId(Long id) {
-        Route route = new Route();
-        route.setId(id);
-        return route;
+    @Named("routeRequestFromId")
+    default RouteRequest routeRequestFromId(Long id) {
+        RouteRequest routeRequest = new RouteRequest();
+        routeRequest.setId(id);
+        return routeRequest;
     }
 }
