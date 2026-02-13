@@ -32,6 +32,12 @@ public class RouteRepository {
             .uniqueResultOptional();
     }
 
+    public Optional<Route> findByRequestId(Long id) {
+        return sessionFactory.getCurrentSession().createQuery("from Route r where r.routeRequest.id = :id", Route.class)
+            .setParameter("id", id)
+            .uniqueResultOptional();
+    }
+
     public void buildRoute(Long routeId, List<Long> zoneIds) {
         Session session = sessionFactory.getCurrentSession();
 

@@ -9,6 +9,7 @@ import com.andrew.dto.route.RouteBuildDTO;
 import com.andrew.dto.route.RouteCreateDTO;
 import com.andrew.dto.route.RouteResponseDTO;
 import com.andrew.model.Role;
+import com.andrew.service.RouteManagementService;
 import com.andrew.service.RouteRequestService;
 import com.andrew.service.RouteService;
 
@@ -35,6 +36,9 @@ public class RouteController {
 
     @Inject
     RouteService routeService;
+
+    @Inject
+    RouteManagementService routeManagementService;
 
     @GET
     @Path("request/{id}")
@@ -69,7 +73,7 @@ public class RouteController {
     @Path("request/{id}/submit")
     @RequireRole(Role.CAPTAIN)
     public Response submitRouteRequest(@PathParam("id") Long id) {
-        routeRequestService.submitRouteRequest(id);
+        routeManagementService.submitRouteRequest(id);
         return Response.ok().build();
     }
 
@@ -91,7 +95,7 @@ public class RouteController {
     @Path("{id}/segments")
     @RequireRole(Role.KEEPER)
     public Response buildRoute(@PathParam("id") Long id, @Valid RouteBuildDTO dto) {
-        routeService.buildRoute(id, dto);
+        routeManagementService.buildRoute(id, dto);
         return Response.ok().build();
     }
 
@@ -99,15 +103,15 @@ public class RouteController {
     @Path("{id}/approve")
     @RequireRole(Role.KEEPER)
     public Response approveRoute(@PathParam("id") Long id) {
-        routeService.approveRoute(id);
+        routeManagementService.approveRoute(id);
         return Response.ok().build();
     }
 
     @POST
-    @Path("{id}/reject")
+    @Path("request/{id}/reject")
     @RequireRole(Role.KEEPER)
-    public Response rejectRoute(@PathParam("id") Long id) {
-        routeService.rejectRoute(id);
+    public Response rejectRouteByKeeper(@PathParam("id") Long id) {
+        routeManagementService.rejectRouteByKeeper(id);
         return Response.ok().build();
     }
 
@@ -115,7 +119,15 @@ public class RouteController {
     @Path("{id}/start")
     @RequireRole(Role.CAPTAIN)
     public Response startRoute(@PathParam("id") Long id) {
-        routeService.startRoute(id);
+        routeManagementService.startRoute(id);
+        return Response.ok().build();
+    }
+
+    @POST
+    @Path("{id}/reject")
+    @RequireRole(Role.CAPTAIN)
+    public Response rejectRouteRequest(@PathParam("id") Long id) {
+        routeManagementService.rejectRouteRequestByCaptain(id);
         return Response.ok().build();
     }
 
@@ -123,7 +135,7 @@ public class RouteController {
     @Path("{id}/complete")
     @RequireRole(Role.CAPTAIN)
     public Response completeRoute(@PathParam("id") Long id) {
-        routeService.completeRoute(id);
+        routeManagementService.completeRoute(id);
         return Response.ok().build();
     }
 }

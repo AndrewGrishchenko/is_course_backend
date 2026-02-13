@@ -25,12 +25,13 @@ public class RouteRequestService {
     @Inject
     CurrentUser currentUser;
 
-    @Inject ShipService shipService;
+    @Inject
+    ShipService shipService;
 
     @Transactional
-    public RouteRequestResponseDTO getById(Long id) {
-        return routeRequestMapper.toResponse(routeRequestRepository.findById(id)
-            .orElseThrow(() -> new NotFoundException("RouteRequest", id)));
+    public RouteRequest getById(Long id) {
+        return routeRequestRepository.findById(id)
+            .orElseThrow(() -> new NotFoundException("RouteRequest", id));
     }
 
     @Transactional
@@ -49,8 +50,7 @@ public class RouteRequestService {
 
     @Transactional
     public RouteRequestResponseDTO updateRouteRequest(Long id, RouteRequestCreateDTO dto) {
-        RouteRequest existing = routeRequestRepository.findById(id)
-            .orElseThrow(() -> new NotFoundException("RouteRequest", id));
+        RouteRequest existing = getById(id);
         
         if (!existing.getStatus().equals(RouteRequestStatus.DRAFT))
             throw new ForbiddenException();
@@ -65,29 +65,15 @@ public class RouteRequestService {
     }
 
     @Transactional
-    public void submitRouteRequest(Long id) {
-        RouteRequest routeRequest = routeRequestRepository.findById(id)
-            .orElseThrow(() -> new NotFoundException("RouteRequest", id));
-        
-        if (!routeRequest.getStatus().equals(RouteRequestStatus.DRAFT))
-            throw new ForbiddenException();
-
-        routeRequest.setStatus(RouteRequestStatus.SUBMITTED);
-        routeRequestRepository.update(routeRequest);
-    }
-
-    @Transactional
     public boolean checkStatus(Long id, RouteRequestStatus status) {
-        RouteRequest routeRequest = routeRequestRepository.findById(id)
-            .orElseThrow(() -> new NotFoundException("RouteRequest", id));
+        RouteRequest routeRequest = getById(id);
 
         return routeRequest.getStatus().equals(status);
     }
 
     @Transactional
     public void deleteRouteRequest(Long id) {
-        RouteRequest routeRequest = routeRequestRepository.findById(id)
-            .orElseThrow(() -> new NotFoundException("RouteRequest", id));
+        RouteRequest routeRequest = getById(id);
         
         routeRequestRepository.delete(routeRequest);
     }
