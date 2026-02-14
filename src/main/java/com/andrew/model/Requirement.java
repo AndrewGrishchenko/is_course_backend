@@ -1,14 +1,23 @@
 package com.andrew.model;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
+import com.andrew.model.enums.RequirementStatus;
+import com.andrew.model.enums.SupplyType;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -22,12 +31,12 @@ public class Requirement {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @ManyToOne
-    @JoinColumn(name = "reward_id", nullable = false)
-    private Supply reward;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "reward_type", nullable = false)
+    private SupplyType rewardType;
 
     @Column(name = "reward_amount")
-    private Long rewardAmount;
+    private Integer rewardAmount;
 
     @Column(name = "start_date")
     private LocalDate startDate;
@@ -35,12 +44,23 @@ public class Requirement {
     @Column(name = "until_date")
     private LocalDate untilDate;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "requirement_status", nullable = false)
+    private RequirementStatus status = RequirementStatus.DRAFT;
+
+    @OneToMany(
+        mappedBy = "requirement",
+        cascade = CascadeType.ALL,
+        orphanRemoval = true
+    )
+    private List<RequirementCondition> conditions = new ArrayList<>();
+
     public Requirement() {
     }
 
-    public Requirement(User user, Supply reward, Long rewardAmount, LocalDate startDate, LocalDate untilDate) {
+    public Requirement(User user, SupplyType rewardType, Integer rewardAmount, LocalDate startDate, LocalDate untilDate) {
         this.user = user;
-        this.reward = reward;
+        this.rewardType = rewardType;
         this.rewardAmount = rewardAmount;
         this.startDate = startDate;
         this.untilDate = untilDate;
@@ -62,19 +82,19 @@ public class Requirement {
         this.user = user;
     }
 
-    public Supply getReward() {
-        return reward;
+    public SupplyType getRewardType() {
+        return rewardType;
     }
 
-    public void setReward(Supply reward) {
-        this.reward = reward;
+    public void setRewardType(SupplyType rewardType) {
+        this.rewardType = rewardType;
     }
 
-    public Long getRewardAmount() {
+    public Integer getRewardAmount() {
         return rewardAmount;
     }
 
-    public void setRewardAmount(Long rewardAmount) {
+    public void setRewardAmount(Integer rewardAmount) {
         this.rewardAmount = rewardAmount;
     }
 
@@ -92,5 +112,13 @@ public class Requirement {
 
     public void setUntilDate(LocalDate untilDate) {
         this.untilDate = untilDate;
+    }
+
+    public RequirementStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(RequirementStatus status) {
+        this.status = status;
     }
 }

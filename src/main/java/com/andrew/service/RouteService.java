@@ -19,18 +19,17 @@ public class RouteService {
     RouteRepository routeRepository;
 
     @Inject
-    RouteRequestService routeRequestService;
+    RouteMapper routeMapper;
 
     @Inject
-    RouteMapper routeMapper;
+    RouteRequestService routeRequestService;
 
     @Transactional
     public RouteResponseDTO createRoute(RouteCreateDTO dto) {
         if (routeRepository.existsByRequestId(dto.routeRequestId()))
             throw new ForbiddenException();
 
-        if (!routeRequestService.checkStatus(dto.routeRequestId(), RouteRequestStatus.SUBMITTED))
-            throw new ForbiddenException();
+        routeRequestService.assertStatus(dto.routeRequestId(), RouteRequestStatus.SUBMITTED);
         
         return createRoute(routeMapper.toEntity(dto));
     }

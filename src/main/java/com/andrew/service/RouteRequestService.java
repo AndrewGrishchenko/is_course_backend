@@ -65,10 +65,9 @@ public class RouteRequestService {
     }
 
     @Transactional
-    public boolean checkStatus(Long id, RouteRequestStatus status) {
-        RouteRequest routeRequest = getById(id);
-
-        return routeRequest.getStatus().equals(status);
+    public void assertStatus(Long id, RouteRequestStatus status) {
+        if (!getById(id).getStatus().equals(status))
+            throw new ForbiddenException();
     }
 
     @Transactional

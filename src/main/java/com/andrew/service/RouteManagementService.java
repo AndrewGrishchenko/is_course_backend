@@ -26,6 +26,9 @@ public class RouteManagementService {
     @Inject
     RouteRequestRepository routeRequestRepository;
 
+    @Inject
+    RequirementService requirementService;
+
     @Transactional
     public Route getRouteById(Long id) {
         return routeRepository.findById(id)
@@ -131,8 +134,11 @@ public class RouteManagementService {
             throw new ForbiddenException();
 
         route.setStatus(RouteStatus.COMPLETED);
+        route.setCurrentDate();
 
         routeRepository.update(route);
+
+        requirementService.calculateFulfillment();
     }
 
     @Transactional

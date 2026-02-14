@@ -12,7 +12,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "requirement_condition")
+@Table(name = "requirement_conditions")
 public class RequirementCondition {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
