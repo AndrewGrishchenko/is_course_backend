@@ -9,7 +9,6 @@ import com.andrew.repository.CaseRepository;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
-import jakarta.security.enterprise.SecurityContext;
 import jakarta.transaction.Transactional;
 
 @ApplicationScoped
@@ -19,9 +18,6 @@ public class CaseService {
 
     @Inject
     CaseMapper caseMapper;
-
-    @Inject
-    private SecurityContext securityContext;
 
     @Transactional
     public CaseResponseDTO createCase(CaseCreateDTO dto) {

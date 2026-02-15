@@ -15,6 +15,7 @@ import jakarta.inject.Inject;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
+import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
@@ -35,6 +36,12 @@ public class RequirementController {
     @Inject
     RequirementConditionService requirementConditionService;
 
+    @GET
+    @RequireRole({Role.OUTGROUP, Role.KEEPER, Role.BOSS, Role.ADMIN})
+    public Response getRequirements() {
+        return Response.ok(requirementService.getAll()).build();
+    }
+
     @POST
     @RequireRole(Role.OUTGROUP)
     public Response createRequirement(@Valid RequirementCreateDTO dto, @Context UriInfo uriInfo) {
@@ -47,6 +54,13 @@ public class RequirementController {
         return Response.created(location)
             .entity(created)
             .build();
+    }
+
+    @GET
+    @Path("{id}")
+    @RequireRole({Role.OUTGROUP, Role.KEEPER, Role.BOSS, Role.ADMIN})
+    public Response getConditions(@PathParam("id") Long id) {
+        return Response.ok(requirementConditionService.getByRequirement(id)).build();
     }
 
     @PUT

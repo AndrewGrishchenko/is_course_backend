@@ -23,6 +23,12 @@ public class DocumentRepository {
         return sessionFactory.getCurrentSession().createQuery("from Document", Document.class).list();
     }
 
+    public List<Document> findByOwnerId(Long id) {
+        return sessionFactory.getCurrentSession().createQuery("from Document d where d.owner.id = :id", Document.class)
+            .setParameter("id", id)
+            .list();
+    }
+
     public Optional<Document> findById(Long id) {
         return sessionFactory.getCurrentSession().createQuery("from Document d where d.id = :id", Document.class)
             .setParameter("id", id)

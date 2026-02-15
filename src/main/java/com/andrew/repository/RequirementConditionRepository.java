@@ -23,6 +23,12 @@ public class RequirementConditionRepository {
         return sessionFactory.getCurrentSession().createQuery("from RequirementCondition", RequirementCondition.class).list();
     }
 
+    public List<RequirementCondition> getByRequirementId(Long id) {
+        return sessionFactory.getCurrentSession().createQuery("from RequirementCondition rc where rc.requirement.id = :id", RequirementCondition.class)
+            .setParameter("id", id)
+            .list();
+    }
+
     public Optional<RequirementCondition> findById(Long id) {
         return sessionFactory.getCurrentSession().createQuery("from RequirementCondition rc where rc.id = :id", RequirementCondition.class)
             .setParameter("id", id)

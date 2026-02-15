@@ -24,6 +24,12 @@ public class RequirementRepository {
         return sessionFactory.getCurrentSession().createQuery("from Requirement", Requirement.class).list();
     }
 
+    public List<Requirement> getByUserId(Long id) {
+        return sessionFactory.getCurrentSession().createQuery("from Requirement r where r.user.id = :id", Requirement.class)
+            .setParameter("id", id)
+            .list();
+    }
+
     public List<Requirement> getActive() {
         return sessionFactory.getCurrentSession().createQuery("from Requirement r where r.status = :status", Requirement.class)
             .setParameter("status", RequirementStatus.ACTIVE)

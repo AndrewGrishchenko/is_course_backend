@@ -12,6 +12,7 @@ import jakarta.inject.Inject;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
+import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
@@ -27,6 +28,12 @@ import jakarta.ws.rs.core.UriInfo;
 public class VisitController {
     @Inject
     VisitRequestService visitRequestService;
+
+    @GET
+    @RequireRole({Role.CAPTAIN, Role.OUTGROUP, Role.KEEPER, Role.BOSS, Role.ADMIN})
+    public Response getAll() {
+        return Response.ok(visitRequestService.getAll()).build();
+    }
 
     @POST
     @RequireRole({Role.OUTGROUP, Role.CAPTAIN})

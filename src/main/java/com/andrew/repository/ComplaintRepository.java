@@ -23,6 +23,12 @@ public class ComplaintRepository {
         return sessionFactory.getCurrentSession().createQuery("from Complaint", Complaint.class).list();
     }
 
+    public List<Complaint> getByCaptainId(Long id) {
+        return sessionFactory.getCurrentSession().createQuery("from Complaint c where c.routeRequest.ship.captain.id = :id", Complaint.class)
+            .setParameter("id", id)
+            .list();
+    }
+
     public Optional<Complaint> findById(Long id) {
         return sessionFactory.getCurrentSession().createQuery("from Complaint c where c.id = :id", Complaint.class)
             .setParameter("id", id)

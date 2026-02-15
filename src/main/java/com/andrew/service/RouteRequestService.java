@@ -1,5 +1,7 @@
 package com.andrew.service;
 
+import java.util.List;
+
 import com.andrew.dto.RouteRequest.RouteRequestCreateDTO;
 import com.andrew.dto.RouteRequest.RouteRequestResponseDTO;
 import com.andrew.exceptions.NotFoundException;
@@ -32,6 +34,17 @@ public class RouteRequestService {
     public RouteRequest getById(Long id) {
         return routeRequestRepository.findById(id)
             .orElseThrow(() -> new NotFoundException("RouteRequest", id));
+    }
+
+    @Transactional
+    public List<RouteRequestResponseDTO> getAll() {
+        List<RouteRequest> routeRequests = switch (currentUser.getUser().getRole()) {
+            case CAPTAIN -> routeRequestRepository.getByCaptainId(currentUser.getUser().getId());
+            case KEEPER, BOSS, ADMIN -> routeRequestRepository.getAll();
+            default -> throw new ForbiddenException();
+        };
+
+        return routeRequests.stream().map(routeRequestMapper::toResponse).toList();
     }
 
     @Transactional

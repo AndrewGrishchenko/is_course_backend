@@ -41,10 +41,10 @@ public class RouteController {
     RouteManagementService routeManagementService;
 
     @GET
-    @Path("request/{id}")
-    @RequireRole({Role.CAPTAIN, Role.KEEPER})
-    public Response getRouteRequest(@PathParam("id") Long id) {
-        return Response.ok(routeRequestService.getById(id)).build();
+    @Path("request")
+    @RequireRole({Role.CAPTAIN, Role.KEEPER, Role.BOSS})
+    public Response getRouteRequests() {
+        return Response.ok(routeRequestService.getAll()).build();
     }
 
     @POST
@@ -75,6 +75,12 @@ public class RouteController {
     public Response submitRouteRequest(@PathParam("id") Long id) {
         routeManagementService.submitRouteRequest(id);
         return Response.ok().build();
+    }
+
+    @GET
+    @RequireRole({Role.CAPTAIN, Role.KEEPER, Role.BOSS})
+    public Response getRoutes() {
+        return Response.ok(routeService.getAll()).build();
     }
 
     @POST

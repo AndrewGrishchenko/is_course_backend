@@ -1,5 +1,7 @@
 package com.andrew.service;
 
+import java.util.List;
+
 import com.andrew.dto.IncidentReport.IncidentReportCreateDTO;
 import com.andrew.dto.IncidentReport.IncidentReportResponseDTO;
 import com.andrew.dto.fine.FineCreateDTO;
@@ -26,6 +28,11 @@ public class IncidentReportService {
 
     @Inject
     FineService fineService;
+
+    @Transactional
+    public List<IncidentReportResponseDTO> getAll() {
+        return incidentReportRepository.getAll().stream().map(incidentReportMapper::toResponse).toList();
+    }
 
     @Transactional
     public IncidentReportResponseDTO createIncidentReport(IncidentReportCreateDTO dto) {

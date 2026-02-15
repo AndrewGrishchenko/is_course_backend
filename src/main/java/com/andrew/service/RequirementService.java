@@ -38,6 +38,17 @@ public class RequirementService {
     DeliveryService deliveryService;
 
     @Transactional
+    public List<RequirementResponseDTO> getAll() {
+        List<Requirement> requirements = switch (currentUser.getUser().getRole()) {
+            case OUTGROUP -> requirementRepository.getByUserId(currentUser.getUser().getId());
+            case KEEPER, BOSS, ADMIN -> requirementRepository.getAll();
+            default -> throw new ForbiddenException();
+        };
+
+        return requirements.stream().map(requirementMapper::toResponse).toList();
+    }
+
+    @Transactional
     public RequirementResponseDTO createRequirement(RequirementCreateDTO dto) {
         Requirement requirement = requirementMapper.toEntity(dto);
         requirement.setUser(currentUser.getUser());

@@ -23,6 +23,12 @@ public class RouteRequestRepository {
         return sessionFactory.getCurrentSession().createQuery("from RouteRequest", RouteRequest.class).list();
     }
 
+    public List<RouteRequest> getByCaptainId(Long id) {
+        return sessionFactory.getCurrentSession().createQuery("from RouteRequest rr where rr.ship.captain.id = :id", RouteRequest.class)
+            .setParameter("id", id)
+            .list();
+    }
+
     public Optional<RouteRequest> findById(Long id) {
         return sessionFactory.getCurrentSession().createQuery("from RouteRequest rr where rr.id = :id", RouteRequest.class)
             .setParameter("id", id)

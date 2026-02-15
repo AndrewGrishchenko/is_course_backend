@@ -5,6 +5,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import org.hibernate.SessionFactory;
 
+import java.util.List;
 import java.util.Optional;
 
 @ApplicationScoped
@@ -14,6 +15,10 @@ public class UserRepository {
 
     public void save(User user) {
         sessionFactory.getCurrentSession().persist(user);
+    }
+
+    public List<User> getAll() {
+        return sessionFactory.getCurrentSession().createQuery("from User", User.class).list();
     }
 
     public Optional<User> findById(Long id) {

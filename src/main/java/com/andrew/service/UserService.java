@@ -1,5 +1,6 @@
 package com.andrew.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import com.andrew.dto.user.UserCreateDTO;
@@ -54,6 +55,11 @@ public class UserService {
             user.getId(),
             JwtUtil.generateToken(user.getUsername(), user.getId(), user.getRole().toString())
         );
+    }
+
+    @Transactional
+    public List<UserCreateResponseDTO> getAll() {
+        return userRepository.getAll().stream().map(userMapper::toResponse).toList();
     }
 
     @Transactional

@@ -12,6 +12,7 @@ import com.andrew.service.UserService;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
@@ -41,6 +42,13 @@ public class UserController {
         
         UserLoginResponseDTO response = userService.login(request);
         return Response.ok(response).build();
+    }
+
+    @GET
+    @Path("/users")
+    @RequireRole(Role.ADMIN)
+    public Response getAll() {
+        return Response.ok(userService.getAll()).build();
     }
 
     // @GET

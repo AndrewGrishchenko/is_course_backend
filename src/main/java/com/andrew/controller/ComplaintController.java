@@ -12,6 +12,7 @@ import com.andrew.service.ComplaintService;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
@@ -27,6 +28,12 @@ import jakarta.ws.rs.core.UriInfo;
 public class ComplaintController {
     @Inject
     ComplaintService complaintService;
+
+    @GET
+    @RequireRole({Role.CAPTAIN, Role.KEEPER, Role.BOSS, Role.ADMIN})
+    public Response getAll() {
+        return Response.ok(complaintService.getAll()).build();
+    }
 
     @POST
     @RequireRole(Role.CAPTAIN)

@@ -23,6 +23,12 @@ public class VisitRequestRepository {
         return sessionFactory.getCurrentSession().createQuery("from VisitRequest", VisitRequest.class).list();
     }
 
+    public List<VisitRequest> getByUserId(Long id) {
+        return sessionFactory.getCurrentSession().createQuery("from VisitRequest vr where vr.user.id = :id", VisitRequest.class)
+            .setParameter("id", id)
+            .list();
+    }
+
     public Optional<VisitRequest> findById(Long id) {
         return sessionFactory.getCurrentSession().createQuery("from VisitRequest vr where vr.id = :id", VisitRequest.class)
             .setParameter("id", id)
