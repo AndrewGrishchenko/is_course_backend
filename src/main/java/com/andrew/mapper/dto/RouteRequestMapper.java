@@ -28,6 +28,7 @@ public interface RouteRequestMapper {
     @Mapping(target = "sourceZoneId", source = "sourceZone.id")
     @Mapping(target = "targetZoneId", source = "targetZone.id")
     @Mapping(target = "documentsIds", source = "documents", qualifiedByName = "documentsToIds")
+    @Mapping(target = "shipType", source = "ship.shipType")
     RouteRequestResponseDTO toResponse(RouteRequest entity);
 
     @Named("shipFromId")

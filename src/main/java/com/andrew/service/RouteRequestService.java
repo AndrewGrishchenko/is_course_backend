@@ -1,5 +1,6 @@
 package com.andrew.service;
 
+import java.util.Comparator;
 import java.util.List;
 
 import com.andrew.dto.RouteRequest.RouteRequestCreateDTO;
@@ -44,7 +45,10 @@ public class RouteRequestService {
             default -> throw new ForbiddenException();
         };
 
-        return routeRequests.stream().map(routeRequestMapper::toResponse).toList();
+        return routeRequests.stream()
+            .sorted(Comparator.comparingLong(RouteRequest::getId))
+            .map(routeRequestMapper::toResponse)
+            .toList();
     }
 
     @Transactional

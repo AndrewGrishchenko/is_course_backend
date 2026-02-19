@@ -134,7 +134,7 @@ public class RouteManagementService {
             throw new ForbiddenException();
 
         route.setStatus(RouteStatus.COMPLETED);
-        route.setCurrentDate();
+        // route.setCurrentDate();
 
         routeRepository.update(route);
 
