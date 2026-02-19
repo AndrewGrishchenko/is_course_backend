@@ -20,6 +20,7 @@ public interface ComplaintMapper {
     @Mapping(target = "caseId", source = "case.id")
     @Mapping(target = "routeRequestId", source = "routeRequest.id")
     @Mapping(target = "description", source = "case.description")
+    @Mapping(target = "status", source = "case.status")
     ComplaintResponseDTO toResponse(Complaint entity);
 
     @Named("routeRequestFromId")
