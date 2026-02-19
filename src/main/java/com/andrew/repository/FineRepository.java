@@ -29,6 +29,12 @@ public class FineRepository {
             .uniqueResultOptional();
     }
 
+    public Optional<Fine> findByCaseId(Long id) {
+        return sessionFactory.getCurrentSession().createQuery("from Fine f where f.caseValue.id = :id", Fine.class)
+            .setParameter("id", id)
+            .uniqueResultOptional();
+    }
+
     public Fine update(Fine fine) {
         return sessionFactory.getCurrentSession().merge(fine);
     }

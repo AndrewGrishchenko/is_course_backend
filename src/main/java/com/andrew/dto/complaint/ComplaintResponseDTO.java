@@ -1,5 +1,7 @@
 package com.andrew.dto.complaint;
 
+import java.math.BigDecimal;
+
 import com.andrew.model.enums.CaseStatus;
 
 public record ComplaintResponseDTO(
@@ -7,5 +9,6 @@ public record ComplaintResponseDTO(
     Long caseId,
     CaseStatus status,
     String description,
-    Long routeRequestId
+    Long routeRequestId,
+    BigDecimal fineAmount
 ) {}

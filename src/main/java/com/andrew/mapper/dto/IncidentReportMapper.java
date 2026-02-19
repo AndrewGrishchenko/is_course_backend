@@ -10,27 +10,34 @@ import com.andrew.dto.IncidentReport.IncidentReportResponseDTO;
 import com.andrew.model.Case;
 import com.andrew.model.IncidentReport;
 import com.andrew.model.Supply;
+import com.andrew.service.FineService;
+
+import jakarta.inject.Inject;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.CDI)
-public interface IncidentReportMapper {
+public abstract class IncidentReportMapper {
+    @Inject
+    protected FineService fineService;
+
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "case", ignore = true)
-    IncidentReport toEntity(IncidentReportCreateDTO dto);
+    public abstract IncidentReport toEntity(IncidentReportCreateDTO dto);
 
     @Mapping(target = "caseId", source = "case.id")
     @Mapping(target = "description", source = "case.description")
     @Mapping(target = "status", source = "case.status")
-    IncidentReportResponseDTO toResponse(IncidentReport entity);
+    @Mapping(target = "fineAmount", expression = "java(fineService.findForCase(entity.getCase().getId()))")
+    public abstract IncidentReportResponseDTO toResponse(IncidentReport entity);
 
     @Named("caseFromId")
-    default Case caseFromId(Long id) {
+    public Case caseFromId(Long id) {
         Case caseValue = new Case();
         caseValue.setId(id);
         return caseValue;
     }
 
     @Named("supplyFromId")
-    default Supply supplyFromId(Long id) {
+    public Supply supplyFromId(Long id) {
         Supply supply = new Supply();
         supply.setId(id);
         return supply;
