@@ -72,6 +72,13 @@ public class UserService {
     }
 
     @Transactional
+    public void deleteUser(Long id) {
+        User existing = userRepository.findById(id)
+            .orElseThrow(() -> new NotFoundException("User", id));
+        userRepository.delete(existing);
+    }
+
+    @Transactional
     public List<UserCreateResponseDTO> getAll() {
         return userRepository.getAll().stream().map(userMapper::toResponse).toList();
     }

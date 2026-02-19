@@ -13,6 +13,7 @@ import com.andrew.service.UserService;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.PUT;
@@ -52,6 +53,14 @@ public class UserController {
     @RequireRole(Role.ADMIN)
     public Response editUser(@PathParam("id") Long id, @Valid UserUpdateDTO dto) {
         return Response.ok(userService.editUser(id, dto)).build();
+    }
+
+    @DELETE
+    @Path("/{id}")
+    @RequireRole(Role.ADMIN)
+    public Response deleteUser(@PathParam("id") Long id) {
+        userService.deleteUser(id);
+        return Response.ok().build();
     }
 
     @GET
