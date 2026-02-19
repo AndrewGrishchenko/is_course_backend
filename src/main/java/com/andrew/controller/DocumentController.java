@@ -4,6 +4,7 @@ import java.io.InputStream;
 import java.nio.file.Files;
 
 import com.andrew.annotation.RequireRole;
+import com.andrew.dto.document.DocumentResponseDTO;
 import com.andrew.model.DocType;
 import com.andrew.model.Document;
 import com.andrew.model.Role;
@@ -54,9 +55,9 @@ public class DocumentController {
         
         InputStream stream = filePart.getContent();
         String originalName = filePart.getFileName().orElse("unknown");
-        documentService.uploadDocument(docType, stream, originalName);
+        DocumentResponseDTO respone = documentService.uploadDocument(docType, stream, originalName);
 
-        return Response.ok().build();
+        return Response.ok(respone).build();
     }
 
     @GET
