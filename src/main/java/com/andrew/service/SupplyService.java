@@ -9,7 +9,6 @@ import com.andrew.repository.SupplyRepository;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
-import jakarta.security.enterprise.SecurityContext;
 import jakarta.transaction.Transactional;
 
 @ApplicationScoped
@@ -19,9 +18,6 @@ public class SupplyService {
 
     @Inject
     SupplyMapper supplyMapper;
-
-    @Inject
-    private SecurityContext securityContext;
 
     @Transactional
     public SupplyResponseDTO createSupply(SupplyCreateDTO dto) {

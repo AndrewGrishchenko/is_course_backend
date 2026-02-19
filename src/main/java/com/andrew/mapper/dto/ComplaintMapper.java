@@ -7,7 +7,6 @@ import org.mapstruct.Named;
 
 import com.andrew.dto.complaint.ComplaintCreateDTO;
 import com.andrew.dto.complaint.ComplaintResponseDTO;
-import com.andrew.model.Case;
 import com.andrew.model.Complaint;
 import com.andrew.model.RouteRequest;
 
@@ -20,14 +19,8 @@ public interface ComplaintMapper {
 
     @Mapping(target = "caseId", source = "case.id")
     @Mapping(target = "routeRequestId", source = "routeRequest.id")
+    @Mapping(target = "description", source = "case.description")
     ComplaintResponseDTO toResponse(Complaint entity);
-
-    @Named("caseFromId")
-    default Case caseFromId(Long id) {
-        Case caseValue = new Case();
-        caseValue.setId(id);
-        return caseValue;
-    }
 
     @Named("routeRequestFromId")
     default RouteRequest routeRequestFromId(Long id) {

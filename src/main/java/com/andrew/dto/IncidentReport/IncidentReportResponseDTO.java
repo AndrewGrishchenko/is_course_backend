@@ -5,5 +5,6 @@ import com.andrew.model.enums.SupplyType;
 public record IncidentReportResponseDTO(
     Long id,
     Long caseId,
+    String description,
     SupplyType supplyType
 ) {}

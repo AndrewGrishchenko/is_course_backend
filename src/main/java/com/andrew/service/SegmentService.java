@@ -9,9 +9,9 @@ import com.andrew.repository.SegmentRepository;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
-import jakarta.security.enterprise.SecurityContext;
 import jakarta.transaction.Transactional;
 
+//TODO: about to remove
 @ApplicationScoped
 public class SegmentService {
     @Inject
@@ -19,9 +19,6 @@ public class SegmentService {
 
     @Inject
     SegmentMapper segmentMapper;
-
-    @Inject
-    private SecurityContext securityContext;
 
     @Transactional
     public SegmentResponseDTO createSegment(SegmentCreateDTO dto) {

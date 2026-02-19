@@ -14,7 +14,9 @@ import jakarta.validation.Valid;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
+import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
+import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
@@ -42,6 +44,13 @@ public class UserController {
         
         UserLoginResponseDTO response = userService.login(request);
         return Response.ok(response).build();
+    }
+
+    @PUT
+    @Path("/user/{id}")
+    @RequireRole(Role.ADMIN)
+    public Response editUser(@PathParam("id") Long id, @Valid UserCreateDTO dto) {
+        return Response.ok(userService.editUser(id, dto)).build();
     }
 
     @GET

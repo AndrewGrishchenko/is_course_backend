@@ -18,6 +18,7 @@ public interface IncidentReportMapper {
     IncidentReport toEntity(IncidentReportCreateDTO dto);
 
     @Mapping(target = "caseId", source = "case.id")
+    @Mapping(target = "description", source = "case.description")
     IncidentReportResponseDTO toResponse(IncidentReport entity);
 
     @Named("caseFromId")

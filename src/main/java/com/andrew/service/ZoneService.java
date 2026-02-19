@@ -6,13 +6,11 @@ import com.andrew.dto.zone.ZoneCreateDTO;
 import com.andrew.dto.zone.ZoneResponseDTO;
 import com.andrew.exceptions.NotFoundException;
 import com.andrew.mapper.dto.ZoneMapper;
-import com.andrew.model.Role;
 import com.andrew.model.Zone;
 import com.andrew.repository.ZoneRepository;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
-import jakarta.security.enterprise.SecurityContext;
 import jakarta.transaction.Transactional;
 
 @ApplicationScoped
@@ -22,9 +20,6 @@ public class ZoneService {
 
     @Inject
     ZoneMapper zoneMapper;
-
-    @Inject
-    private SecurityContext securityContext;
 
     @Transactional
     public List<ZoneResponseDTO> getAll() {
@@ -47,8 +42,6 @@ public class ZoneService {
         zoneRepository.findById(id)
             .orElseThrow(() -> new NotFoundException("Zone", id));
         
-        // if (!securityContext.isCallerInRole(Role.ADMIN.name())) throw smth;
-
         Zone toUpdate = zoneMapper.toEntity(dto);
         toUpdate.setId(id);
 

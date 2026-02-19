@@ -53,8 +53,19 @@ public class UserService {
         User user = userOpt.get();
         return new UserLoginResponseDTO(
             user.getId(),
-            JwtUtil.generateToken(user.getUsername(), user.getId(), user.getRole().toString())
+            JwtUtil.generateToken(user.getUsername(), user.getId(), user.getRole().toString()),
+            user.getRole()
         );
+    }
+
+    @Transactional
+    public UserCreateResponseDTO editUser(Long id, UserCreateDTO dto) {
+        User existing = userRepository.findById(id)
+            .orElseThrow(() -> new NotFoundException("User", id));
+
+        User user = new User(dto.username(), dto.fullname(), dto.role(), dto.email(), PasswordUtil.hash(dto.password()));
+        user.setId(existing.getId());
+        return userMapper.toResponse(userRepository.update(user));
     }
 
     @Transactional

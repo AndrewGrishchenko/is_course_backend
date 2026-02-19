@@ -23,6 +23,12 @@ public class ShipRepository {
         return sessionFactory.getCurrentSession().createQuery("from Ship", Ship.class).list();
     }
 
+    public List<Ship> getByCaptainId(Long id) {
+        return sessionFactory.getCurrentSession().createQuery("from Ship s where s.captain.id = :id", Ship.class)
+            .setParameter("id", id)
+            .list();
+    }
+
     public Optional<Ship> findById(Long id) {
         return sessionFactory.getCurrentSession().createQuery("from Ship s where s.id = :id", Ship.class)
             .setParameter("id", id)
