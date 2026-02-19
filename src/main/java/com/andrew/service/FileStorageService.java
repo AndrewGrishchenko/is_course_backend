@@ -31,6 +31,10 @@ public class FileStorageService {
         }
     }
 
+    public Path resolve(String filePath) {
+        return Paths.get(uploadDir.toString(), filePath);
+    }
+
     private String sanitize(String filename) {
         return filename.replaceAll("[^a-zA-Z0-9\\.\\-]", "_");
     }

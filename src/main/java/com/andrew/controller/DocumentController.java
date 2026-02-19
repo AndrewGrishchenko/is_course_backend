@@ -1,11 +1,14 @@
 package com.andrew.controller;
 
 import java.io.InputStream;
+import java.nio.file.Files;
 
 import com.andrew.annotation.RequireRole;
 import com.andrew.model.DocType;
+import com.andrew.model.Document;
 import com.andrew.model.Role;
 import com.andrew.service.DocumentService;
+import com.andrew.service.FileStorageService;
 
 import jakarta.inject.Inject;
 import jakarta.ws.rs.BadRequestException;
@@ -19,6 +22,7 @@ import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.EntityPart;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.StreamingOutput;
 
 @Path("/document")
 @Produces(MediaType.APPLICATION_JSON)
@@ -27,8 +31,11 @@ public class DocumentController {
     @Inject
     DocumentService documentService;
 
+    @Inject
+    FileStorageService fileStorageService;
+
     @GET
-    @RequireRole({Role.ADMIN, Role.CAPTAIN})
+    @RequireRole({Role.ADMIN, Role.CAPTAIN, Role.KEEPER})
     public Response getDocuments(@PathParam("id") Long id) {
         return Response.ok(documentService.getAll()).build();
     }
@@ -50,5 +57,30 @@ public class DocumentController {
         documentService.uploadDocument(docType, stream, originalName);
 
         return Response.ok().build();
+    }
+
+    @GET
+    @Path("{id}")
+    @RequireRole({Role.ADMIN, Role.CAPTAIN, Role.KEEPER})
+    public Response getById(@PathParam("id") Long id) {
+        return Response.ok(documentService.getResponseById(id)).build();
+    }
+
+    @GET
+    @Path("{id}/download")
+    @Produces(MediaType.APPLICATION_OCTET_STREAM)
+    public Response getImage(@PathParam("id") Long id) {
+        Document document = documentService.getById(id);
+
+        java.nio.file.Path path = fileStorageService.resolve(document.getFilePath());
+
+        StreamingOutput stream = output -> {
+            Files.copy(path, output);
+        };
+
+        return Response.ok(stream)
+            .header("Content-Disposition",
+                "attachment; filename=\"" + path.getFileName() + "\"")
+            .build();
     }
 }

@@ -33,10 +33,14 @@ public class DocumentService {
     FileStorageService fileStorageService;
 
     @Transactional
-    public DocumentResponseDTO getById(Long id) {
-        Document document = documentRepository.findById(id)
+    public DocumentResponseDTO getResponseById(Long id) {
+        return documentMapper.toResponse(getById(id));
+    }
+
+    @Transactional
+    public Document getById(Long id) {
+        return documentRepository.findById(id)
             .orElseThrow(() -> new NotFoundException("Document", id));
-        return documentMapper.toResponse(document);
     }
 
     @Transactional
@@ -92,7 +96,7 @@ public class DocumentService {
     @Transactional
     public List<DocumentResponseDTO> getAll() {
         List<Document> documents = switch (currentUser.getUser().getRole()) {
-            case ADMIN -> documentRepository.getAll();
+            case ADMIN, KEEPER -> documentRepository.getAll();
             case CAPTAIN -> documentRepository.findByOwnerId(currentUser.getUser().getId());
             default -> throw new ForbiddenException(); 
         };
