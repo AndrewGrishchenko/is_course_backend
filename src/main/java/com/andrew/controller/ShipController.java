@@ -31,7 +31,7 @@ public class ShipController {
     ShipService shipService;
 
     @GET
-    @RequireRole({Role.CAPTAIN, Role.ADMIN})
+    @RequireRole({Role.CAPTAIN, Role.KEEPER})
     public Response getShips() {
         return Response.ok(shipService.getAll()).build();
     }
@@ -58,7 +58,7 @@ public class ShipController {
     }
 
     @DELETE
-    @Path("/id")
+    @Path("/{id}")
     @RequireRole(Role.ADMIN)
     public Response deleteShip(@PathParam("id") Long id) {
         shipService.deleteShip(id);

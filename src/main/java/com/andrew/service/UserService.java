@@ -6,6 +6,7 @@ import java.util.Optional;
 import com.andrew.dto.user.UserCreateDTO;
 import com.andrew.dto.user.UserLoginDTO;
 import com.andrew.dto.user.UserLoginResponseDTO;
+import com.andrew.dto.user.UserUpdateDTO;
 import com.andrew.dto.user.UserCreateResponseDTO;
 import com.andrew.exceptions.NotFoundException;
 import com.andrew.exceptions.ValidationException;
@@ -59,13 +60,15 @@ public class UserService {
     }
 
     @Transactional
-    public UserCreateResponseDTO editUser(Long id, UserCreateDTO dto) {
+    public UserCreateResponseDTO editUser(Long id, UserUpdateDTO dto) {
         User existing = userRepository.findById(id)
             .orElseThrow(() -> new NotFoundException("User", id));
 
-        User user = new User(dto.username(), dto.fullname(), dto.role(), dto.email(), PasswordUtil.hash(dto.password()));
-        user.setId(existing.getId());
-        return userMapper.toResponse(userRepository.update(user));
+        existing.setUsername(dto.username());
+        existing.setFullname(dto.fullname());
+        existing.setRole(dto.role());
+        existing.setEmail(dto.email());
+        return userMapper.toResponse(userRepository.update(existing));
     }
 
     @Transactional

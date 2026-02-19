@@ -5,6 +5,7 @@ import com.andrew.dto.user.UserCreateDTO;
 import com.andrew.dto.user.UserCreateResponseDTO;
 import com.andrew.dto.user.UserLoginDTO;
 import com.andrew.dto.user.UserLoginResponseDTO;
+import com.andrew.dto.user.UserUpdateDTO;
 import com.andrew.exceptions.NotFoundException;
 import com.andrew.model.Role;
 import com.andrew.service.UserService;
@@ -47,15 +48,15 @@ public class UserController {
     }
 
     @PUT
-    @Path("/user/{id}")
+    @Path("/{id}")
     @RequireRole(Role.ADMIN)
-    public Response editUser(@PathParam("id") Long id, @Valid UserCreateDTO dto) {
+    public Response editUser(@PathParam("id") Long id, @Valid UserUpdateDTO dto) {
         return Response.ok(userService.editUser(id, dto)).build();
     }
 
     @GET
     @Path("/users")
-    @RequireRole(Role.ADMIN)
+    @RequireRole({Role.KEEPER, Role.ADMIN})
     public Response getAll() {
         return Response.ok(userService.getAll()).build();
     }

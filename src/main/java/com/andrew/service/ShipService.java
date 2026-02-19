@@ -30,7 +30,7 @@ public class ShipService {
     public List<ShipResponseDTO> getAll() {
         List<Ship> ships = switch (currentUser.getUser().getRole()) {
             case CAPTAIN -> shipRepository.getByCaptainId(currentUser.getUser().getId());
-            case ADMIN -> shipRepository.getAll();
+            case ADMIN, KEEPER -> shipRepository.getAll();
             default -> throw new ForbiddenException();
         };
 
