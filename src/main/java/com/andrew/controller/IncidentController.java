@@ -30,7 +30,7 @@ public class IncidentController {
     IncidentReportService incidentReportService;
 
     @GET
-    @RequireRole({Role.KEEPER, Role.BOSS, Role.ADMIN})
+    @RequireRole({Role.KEEPER, Role.BOSS})
     public Response getAll() {
         return Response.ok(incidentReportService.getAll()).build();
     }

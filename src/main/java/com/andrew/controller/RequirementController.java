@@ -37,7 +37,7 @@ public class RequirementController {
     RequirementConditionService requirementConditionService;
 
     @GET
-    @RequireRole({Role.OUTGROUP, Role.KEEPER, Role.BOSS, Role.ADMIN})
+    @RequireRole({Role.OUTGROUP, Role.KEEPER, Role.BOSS})
     public Response getRequirements() {
         return Response.ok(requirementService.getAll()).build();
     }
@@ -58,7 +58,7 @@ public class RequirementController {
 
     @GET
     @Path("{id}")
-    @RequireRole({Role.OUTGROUP, Role.KEEPER, Role.BOSS, Role.ADMIN})
+    @RequireRole({Role.OUTGROUP, Role.KEEPER, Role.BOSS})
     public Response getConditions(@PathParam("id") Long id) {
         return Response.ok(requirementConditionService.getByRequirement(id)).build();
     }

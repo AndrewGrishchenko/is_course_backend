@@ -36,7 +36,7 @@ public class DocumentController {
     FileStorageService fileStorageService;
 
     @GET
-    @RequireRole({Role.ADMIN, Role.CAPTAIN, Role.KEEPER})
+    @RequireRole({Role.CAPTAIN, Role.KEEPER, Role.BOSS})
     public Response getDocuments(@PathParam("id") Long id) {
         return Response.ok(documentService.getAll()).build();
     }
@@ -62,13 +62,14 @@ public class DocumentController {
 
     @GET
     @Path("{id}")
-    @RequireRole({Role.ADMIN, Role.CAPTAIN, Role.KEEPER})
+    @RequireRole({Role.CAPTAIN, Role.KEEPER, Role.BOSS})
     public Response getById(@PathParam("id") Long id) {
         return Response.ok(documentService.getResponseById(id)).build();
     }
 
     @GET
     @Path("{id}/download")
+    @RequireRole({Role.CAPTAIN, Role.KEEPER, Role.BOSS})
     @Produces(MediaType.APPLICATION_OCTET_STREAM)
     public Response getImage(@PathParam("id") Long id) {
         Document document = documentService.getById(id);

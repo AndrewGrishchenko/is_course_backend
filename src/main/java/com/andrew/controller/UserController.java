@@ -59,21 +59,4 @@ public class UserController {
     public Response getAll() {
         return Response.ok(userService.getAll()).build();
     }
-
-    // @GET
-    // @Path("/user")
-    // public Response getAll() {
-    //     // PageResponse<User> pagedResult = userService.getAllUsers(mine, page, size, sort, order);
-
-    //     // List<OwnerResponse> responseList = pagedResult.content().stream()
-    //     //     .map(ResponseMapper::toResponse)
-    //     //     .collect(Collectors.toList());
-
-    //     // PageResponse<OwnerResponse> response = new PageResponse<>(
-    //     //     responseList,
-    //     //     pagedResult.totalElements()
-    //     // );
-
-    //     // return Response.ok(response).build();
-    // }
 }

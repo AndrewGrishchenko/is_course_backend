@@ -26,7 +26,13 @@ public class DeliveryRepository {
     public Optional<Delivery> findById(Long id) {
         return sessionFactory.getCurrentSession().createQuery("from Delivery d where d.id = :id", Delivery.class)
             .setParameter("id", id)
-        .uniqueResultOptional();
+            .uniqueResultOptional();
+    }
+
+    public List<Delivery> findByVisitId(Long id) {
+        return sessionFactory.getCurrentSession().createQuery("from Delivery d where d.visitRequest.id = :id", Delivery.class)
+            .setParameter("id", id)
+            .list();
     }
 
     public Delivery update(Delivery delivery) {

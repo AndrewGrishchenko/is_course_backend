@@ -30,7 +30,7 @@ public class ComplaintController {
     ComplaintService complaintService;
 
     @GET
-    @RequireRole({Role.CAPTAIN, Role.KEEPER, Role.BOSS, Role.ADMIN})
+    @RequireRole({Role.CAPTAIN, Role.KEEPER, Role.BOSS})
     public Response getAll() {
         return Response.ok(complaintService.getAll()).build();
     }

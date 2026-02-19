@@ -1,8 +1,10 @@
 package com.andrew.service;
 
-import com.andrew.dto.supply.SupplyCreateDTO;
+import java.util.List;
+import java.util.Optional;
+
+import com.andrew.dto.supply.SupplyEditDTO;
 import com.andrew.dto.supply.SupplyResponseDTO;
-import com.andrew.exceptions.NotFoundException;
 import com.andrew.mapper.dto.SupplyMapper;
 import com.andrew.model.Supply;
 import com.andrew.repository.SupplyRepository;
@@ -20,32 +22,24 @@ public class SupplyService {
     SupplyMapper supplyMapper;
 
     @Transactional
-    public SupplyResponseDTO createSupply(SupplyCreateDTO dto) {
-        return createSupply(supplyMapper.toEntity(dto));
+    public List<SupplyResponseDTO> getAll() {
+        return supplyRepository.getAll().stream()
+            .map(supplyMapper::toResponse)
+            .toList();
     }
 
     @Transactional
-    private SupplyResponseDTO createSupply(Supply supply) {
-        supplyRepository.save(supply);
-        return supplyMapper.toResponse(supply);
-    }
+    public SupplyResponseDTO editSupply(SupplyEditDTO dto) {
+        Optional<Supply> supplyOpt = supplyRepository.findByType(dto.name());
 
-    @Transactional
-    public SupplyResponseDTO updateSupply(Long id, SupplyCreateDTO dto) {
-        supplyRepository.findById(id)
-            .orElseThrow(() -> new NotFoundException("Supply", id));
-
-        Supply toUpdate = supplyMapper.toEntity(dto);
-        toUpdate.setId(id);
-        
-        return supplyMapper.toResponse(supplyRepository.update(toUpdate));
-    }
-
-    @Transactional
-    public void deleteSupply(Long id) {
-        Supply supply = supplyRepository.findById(id)
-            .orElseThrow(() -> new NotFoundException("Supply", id));
-        
-        supplyRepository.delete(supply);
+        if (supplyOpt.isPresent()) {
+            Supply supply = supplyOpt.get();
+            supply.setAmount(dto.amount());
+            return supplyMapper.toResponse(supplyRepository.update(supply));
+        } else {
+            Supply supply = new Supply(dto.name(), dto.amount());
+            supplyRepository.save(supply);
+            return supplyMapper.toResponse(supply);
+        }
     }
 }

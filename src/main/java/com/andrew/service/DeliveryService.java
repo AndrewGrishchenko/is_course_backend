@@ -1,5 +1,7 @@
 package com.andrew.service;
 
+import java.util.List;
+
 import com.andrew.dto.delivery.DeliveryCreateDTO;
 import com.andrew.dto.delivery.DeliveryResponseDTO;
 import com.andrew.exceptions.NotFoundException;
@@ -29,6 +31,13 @@ public class DeliveryService {
     public Delivery getById(Long id) {
         return deliveryRepository.findById(id)
             .orElseThrow(() -> new NotFoundException("Delivery", id));
+    }
+
+    @Transactional
+    public List<DeliveryResponseDTO> getDeliveryForVisit(Long visitId) {
+        return deliveryRepository.findByVisitId(visitId).stream()
+            .map(deliveryMapper::toResponse)
+            .toList();
     }
 
     @Transactional

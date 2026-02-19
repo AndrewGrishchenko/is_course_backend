@@ -30,13 +30,13 @@ public class VisitController {
     VisitRequestService visitRequestService;
 
     @GET
-    @RequireRole({Role.CAPTAIN, Role.OUTGROUP, Role.KEEPER, Role.BOSS, Role.ADMIN})
+    @RequireRole({Role.CAPTAIN, Role.OUTGROUP, Role.KEEPER, Role.BOSS})
     public Response getAll() {
         return Response.ok(visitRequestService.getAll()).build();
     }
 
     @POST
-    @RequireRole({Role.OUTGROUP, Role.CAPTAIN})
+    @RequireRole({Role.OUTGROUP, Role.CAPTAIN, Role.BOSS})
     public Response createVisitRequest(@Valid VisitRequestCreateDTO dto, @Context UriInfo uriInfo) {
         VisitRequestResponseDTO created = visitRequestService.createVisitRequest(dto);
 
@@ -51,7 +51,7 @@ public class VisitController {
 
     @DELETE
     @Path("{id}")
-    @RequireRole({Role.OUTGROUP, Role.CAPTAIN})
+    @RequireRole({Role.OUTGROUP, Role.CAPTAIN, Role.BOSS})
     public Response deleteVisitRequest(@PathParam("id") Long id) {
         visitRequestService.deleteVisitRequest(id);
         return Response.ok().build();
@@ -59,7 +59,7 @@ public class VisitController {
 
     @POST
     @Path("{id}/submit")
-    @RequireRole({Role.OUTGROUP, Role.CAPTAIN})
+    @RequireRole({Role.OUTGROUP, Role.CAPTAIN, Role.BOSS})
     public Response submitVisitRequest(@PathParam("id") Long id) {
         visitRequestService.submitVisitRequest(id);
         return Response.ok().build();

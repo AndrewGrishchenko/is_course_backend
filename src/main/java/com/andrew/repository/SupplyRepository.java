@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.hibernate.SessionFactory;
 
 import com.andrew.model.Supply;
+import com.andrew.model.enums.SupplyType;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -21,6 +22,12 @@ public class SupplyRepository {
 
     public List<Supply> getAll() {
         return sessionFactory.getCurrentSession().createQuery("from Supply", Supply.class).list();
+    }
+
+    public Optional<Supply> findByType(SupplyType supplyType) {
+        return sessionFactory.getCurrentSession().createQuery("from Supply s where s.name = :name", Supply.class)
+            .setParameter("name", supplyType)
+            .uniqueResultOptional();
     }
 
     public Optional<Supply> findById(Long id) {
