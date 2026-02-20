@@ -3,6 +3,7 @@ package com.andrew.repository;
 import java.util.List;
 import java.util.Optional;
 
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
 import com.andrew.model.RouteRequest;
@@ -37,6 +38,13 @@ public class RouteRequestRepository {
 
     public RouteRequest update(RouteRequest routeRequest) {
         return sessionFactory.getCurrentSession().merge(routeRequest);
+    }
+
+    public RouteRequest updateAndFlush(RouteRequest routeRequest) {
+        Session session = sessionFactory.getCurrentSession();
+        RouteRequest merged = session.merge(routeRequest);
+        session.flush();
+        return merged;
     }
 
     public void delete(RouteRequest routeRequest) {

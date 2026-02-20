@@ -6,6 +6,7 @@ import java.util.Optional;
 import com.andrew.dto.route.RouteBuildDTO;
 import com.andrew.exceptions.NotFoundException;
 import com.andrew.exceptions.RouteBuildException;
+import com.andrew.exceptions.ValidationException;
 import com.andrew.model.Route;
 import com.andrew.model.RouteRequest;
 import com.andrew.model.enums.RouteRequestStatus;
@@ -155,7 +156,13 @@ public class RouteManagementService {
             throw new ForbiddenException();
 
         routeRequest.setStatus(RouteRequestStatus.SUBMITTED);
-        routeRequestRepository.update(routeRequest);
+        
+        try {
+            routeRequestRepository.updateAndFlush(routeRequest);
+        } catch (Exception ex) {
+            String msg = extractSqlErrorMessage(ex);
+            throw new ValidationException("Failed to build route: " + msg);
+        }
     }
 
     @Transactional

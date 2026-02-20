@@ -118,9 +118,12 @@ public class RequirementService {
     @Transactional
     public void calculateFulfillment() {
         List<Requirement> active = requirementRepository.getActive();
+        System.err.println("active req count: " + String.valueOf(active.size()));
 
         for (Requirement req : active) {
+            System.err.println("checking req id " + String.valueOf(req.getId()));
             if (LocalDate.now().isAfter(req.getUntilDate())) {
+                System.err.println("finalizing requirement " + String.valueOf(req.getId()));
                 finalizeRequirement(req);
             }
         }
@@ -129,6 +132,7 @@ public class RequirementService {
     @Transactional
     private void finalizeRequirement(Requirement requirement) {
         boolean isFulfilled = requirementRepository.isFulfilled(requirement.getId());
+        System.err.println("req " + String.valueOf(requirement.getId()) + " is " + isFulfilled);
 
         if (isFulfilled) {
             requirement.setStatus(RequirementStatus.COMPLETED);
